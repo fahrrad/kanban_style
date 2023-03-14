@@ -18,6 +18,7 @@
                  [org.clojure/tools.logging "1.2.4"]]
   :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]
   :plugins [[lein-ring "0.12.6"]] 
-  :ring {:handler htmx-playground.core/app
-         :auto-refresh? true}
+  :ring {:handler htmx-playground.core/app}
+  :profiles {:dev {:resource-paths ["resources" "resources.dev"]}
+             :prod {:resource-paths ["resources" "resources.prod"]}}
   :repl-options {:init-ns htmx-playground.core})

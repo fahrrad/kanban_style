@@ -12,6 +12,9 @@
                  [org.slf4j/slf4j-api "2.0.6"]
                  ;; https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
                  [ch.qos.logback/logback-classic "1.4.5"] 
+                 [ch.qos.logback.contrib/logback-jackson "0.1.5"]
+                 [ch.qos.logback.contrib/logback-json-classic "0.1.5"]
+                 [com.fasterxml.jackson.core/jackson-databind "2.14.2"]
                  [org.clojure/tools.logging "1.2.4"]]
   :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]
   :plugins [[lein-ring "0.12.6"]] 

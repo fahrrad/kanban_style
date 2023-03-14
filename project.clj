@@ -7,7 +7,13 @@
                  [ring "1.9.6"]
                  [hiccup "1.0.5"]
                  [ring-logger "1.1.1"]
-                 [com.taoensso/carmine "3.2.0"]]
+                 [com.taoensso/carmine "3.2.0"]
+                 ;; https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+                 [org.slf4j/slf4j-api "2.0.6"]
+                 ;; https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+                 [ch.qos.logback/logback-classic "1.4.5"] 
+                 [org.clojure/tools.logging "1.2.4"]]
+  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]
   :plugins [[lein-ring "0.12.6"]] 
   :ring {:handler htmx-playground.core/app
          :auto-refresh? true}

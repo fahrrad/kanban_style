@@ -1,6 +1,7 @@
 (ns htmx-playground.core
   (:require [hiccup.core :refer [html]]
             [ring.middleware.file :refer [wrap-file]]
+            [ring.util.response :refer [response redirect not-found]]
             [ring.logger :as logger]
             [taoensso.carmine :as car :refer [wcar]]))
 
@@ -54,17 +55,17 @@
                     (filter #(= :done (:status %)) cards) ))])
 
 (defn handler [req]
-  (let [path (:uri req)
-        resp (case path
-               "/test" (html [:h1.test {:hx-post "/click"} "Testing Mars"])
-               "/board" (page (board (wcar my-wcar-opts (car/get "cards"))))
-               "/column" (html (column "new" cards))
-               "/ping" (html (wcar my-wcar-opts (car/ping)))
-               "/populate" (html (wcar my-wcar-opts (car/set "cards" cards)))
-               "404!")]
-    {:status 200
-     :body resp}))
+  (let [path (:uri req)]
+    (case path
+      "/" (redirect "/board")
+      "/test" (response (html [:h1.test {:hx-post "/click"} "Testing Mars"]))
+      "/board" (response (page (board (wcar my-wcar-opts (car/get "cards")))))
+      "/column" (response (html (column "new" cards)))
+      "/ping" (response (html (wcar my-wcar-opts (car/ping))))
+      "/populate" (response (html (wcar my-wcar-opts (car/set "cards" cards))))
+      (not-found (str "Could not find " path)))))
 
 (def app 
-  (logger/wrap-with-logger 
-   (wrap-file handler "resources/public")))
+  (-> handler
+      (wrap-file "resources/public")
+      (logger/wrap-with-logger)))

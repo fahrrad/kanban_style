@@ -1,4 +1,4 @@
-(ns htmx-playground.core
+(ns kanban-style.core
   (:require [hiccup.core :refer [html]]
             [ring.middleware.file :refer [wrap-file]]
             [ring.util.response :refer [response redirect not-found]]

@@ -1,7 +1,17 @@
 (ns htmx-playground.core
   (:require [hiccup.core :refer [html]]
             [ring.middleware.file :refer [wrap-file]]
-            [ring.logger :as logger]))
+            [ring.logger :as logger]
+            [taoensso.carmine :as car :refer [wcar]]))
+
+
+(defonce my-conn-pool   (car/connection-pool {}))
+(def     my-conn-spec-1 {:uri "redis://localhost:6379/"})
+
+(def my-wcar-opts
+  {:pool my-conn-pool
+   :spec my-conn-spec-1})
+
 
 ;; Demo data set
 (def cards [{:title "Wash windows" :content "they are really dirty" :status :start}
@@ -16,9 +26,11 @@
     [:script {:src "https://unpkg.com/htmx.org@1.8.6"}]
     [:title "Kanban Style!"]]
    [:div.header "Kanban Style!"]
-   [:div.topnav [:button {:data-hx-get "/column" 
-                          :data-hx-target ".row"
-                          :data-hx-swap "afterend"} "Add"]]
+   [:div.topnav
+    [:button {:data-hx-get "/ping" } "Ping"]
+    [:button {:data-hx-get "/column"
+              :data-hx-target ".row"
+              :data-hx-swap "afterend"} "Add"]]
    [:body body]))
 
 (defn card [{content :content title :title}]
@@ -46,6 +58,7 @@
                "/test" (html [:h1.test {:hx-post "/click"} "Testing Mars"])
                "/board" (page (board))
                "/column" (html (column "new" cards))
+               "/ping" (html (wcar my-wcar-opts (car/ping)))
                "404!")]
     {:status 200
      :body resp}))

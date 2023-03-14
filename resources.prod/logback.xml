@@ -21,9 +21,4 @@
   <root level="info">
     <appender-ref ref="stdout"/>
   </root>
-
-  <logger name="ring.logger" level="info">
-    <appender-ref ref="stdout" />
-  </logger>
-
 </configuration>

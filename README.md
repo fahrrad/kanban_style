@@ -18,6 +18,7 @@ Roadmap:
 ## Technologies
 
  - [HMLX](https://htmx.org/)
+ - [Aleph](https://aleph.io/manifold/rationale.html) and [manifold](https://github.com/clj-commons/manifold) for streaming card updates to the dashboards
 
 ## License
 

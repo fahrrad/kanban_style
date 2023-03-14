@@ -12,11 +12,11 @@
   {:pool my-conn-pool
    :spec my-conn-spec-1})
 
-
 ;; Demo data set
 (def cards [{:title "Wash windows" :content "they are really dirty" :status :start}
-            {:title "prep food" :content "Kids go hungry" :status :done}
+            {:title "prep food" :content "Kids go hungry" :status :start}
             {:title "go swimming" :content "fish feel so alone" :status :done}])
+
 
 ;; Page with everything that has to be on it
 (defn page [body]
@@ -47,18 +47,20 @@
     [:input.content]
     [:button {:data-hx-post "/card"} "+"]]])
 
-(defn board []
+(defn board [cards]
   [:div.row
    (column "start" (filter #(= :start (:status %)) cards))
-   (column "done" (filter #(= :done (:status %)) cards))])
+   (column "done" (cons (card {:content "Add" :title "Add"}) 
+                    (filter #(= :done (:status %)) cards) ))])
 
 (defn handler [req]
   (let [path (:uri req)
         resp (case path
                "/test" (html [:h1.test {:hx-post "/click"} "Testing Mars"])
-               "/board" (page (board))
+               "/board" (page (board (wcar my-wcar-opts (car/get "cards"))))
                "/column" (html (column "new" cards))
                "/ping" (html (wcar my-wcar-opts (car/ping)))
+               "/populate" (html (wcar my-wcar-opts (car/set "cards" cards)))
                "404!")]
     {:status 200
      :body resp}))

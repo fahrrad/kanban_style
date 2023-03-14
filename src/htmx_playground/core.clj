@@ -38,4 +38,4 @@
             [:body resp])}))
 
 (def app 
-  (wrap-file handler "resources/public"))
+   (wrap-file handler "resources/public")))

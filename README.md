@@ -9,8 +9,6 @@ Small Kanban like app, using htmx and clojure ring
 ## Technologies
 
  - [HMLX](https://htmx.org/)
- - 
-
 
 ## License
 

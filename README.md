@@ -1,10 +1,8 @@
 # htmx-playground
 
-As much a way of learning as a tool
-
-## Usage
-
 Small Kanban like app, using htmx and clojure ring. 
+
+As much a way of learning as a tool
 
 Data will be stored in a key-value store. There is no schema. Columns are defined by searches and a search
 can be for combination of key-value-operator pairs. for example, (:name :contains :test) or (:date :after "20230324"). 
@@ -13,7 +11,16 @@ Roadmap:
   - search critera can be combined
   - combinations can be nested
   - changes to resultsets are pushed to the dashboard (no need to refresh)
-  
+
+## Usage
+
+Start the redis server with docker-compose: 
+
+  `docker-compose up`
+
+start the webapp with lein
+
+  `lein ring server 4000`
 
 ## Technologies
 

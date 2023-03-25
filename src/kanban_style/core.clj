@@ -6,12 +6,12 @@
             [taoensso.carmine :as car :refer [wcar]]))
 
 
-(defonce my-conn-pool   (car/connection-pool {}))
-(def     my-conn-spec-1 {:uri "redis://localhost:6379/"})
+(defonce db-conn-pool   (car/connection-pool {}))
+(def     db-conn-string {:uri "redis://localhost:6379/"})
 
-(def my-wcar-opts
-  {:pool my-conn-pool
-   :spec my-conn-spec-1})
+(def wcar-opts
+  {:pool db-conn-pool
+   :spec db-conn-string})
 
 ;; Demo data set
 (def cards [{:title "Wash windows" :content "they are really dirty" :status :start}
@@ -55,16 +55,18 @@
                     (filter #(= :done (:status %)) cards) ))])
 
 (defn handler [req]
-  (let [path (:uri req)]
+  (let [path (:uri req)
+        wcar* (partial (wcar wcar-opts))]
     (case path
       "/" (redirect "/board")
       "/test" (response (html [:h1.test {:hx-post "/click"} "Testing Mars"]))
-      "/board" (response (page (board (wcar my-wcar-opts (car/get "cards")))))
+      "/board" (response (page (board (wcar* (car/get "cards")))))
       "/column" (response (html (column "new" cards)))
-      "/ping" (response (html (wcar my-wcar-opts (car/ping))))
-      "/populate" (response (html (wcar my-wcar-opts (car/set "cards" cards))))
+      "/ping" (response (html (wcar* (car/ping))))
+      "/populate" (response (html (wcar* (car/set "cards" cards))))
       (not-found (str "Could not find " path)))))
 
+#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (def app 
   (-> handler
       (wrap-file "resources/public")
